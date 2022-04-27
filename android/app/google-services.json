@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1070104305917",
+    "project_id": "geo-me-app",
+    "storage_bucket": "geo-me-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1070104305917:android:90b9f0c5b4fabdaf611e94",
+        "android_client_info": {
+          "package_name": "com.example.geo_me"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1070104305917-rpbc9qrrd56bmh1bi6o9map88jr36peq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDe4jgmGgpUcvlHjklR4bu2QnLyNCdhMjU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1070104305917-rpbc9qrrd56bmh1bi6o9map88jr36peq.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1070104305917-47bh1cdeaahonsacu9k5v08g7omegg3o.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.geoMe"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
