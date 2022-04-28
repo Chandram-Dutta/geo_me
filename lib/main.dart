@@ -1,26 +1,25 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:geo_me/pages/account_page.dart';
-import 'package:geo_me/pages/login_page.dart';
-import 'package:geo_me/pages/signup_page.dart';
+import 'package:geo_me/features/auth/auth_checker.dart';
+import 'package:geo_me/providers.dart';
 
+import 'pages/error_screen.dart';
 import 'pages/loading_page.dart';
 
-void main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
   runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final initialize = ref.watch(firebaseinitializerProvider);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Geo ME',
       theme: ThemeData(
         primarySwatch: Colors.green,
         colorScheme: const ColorScheme.light(
@@ -43,13 +42,16 @@ class MyApp extends StatelessWidget {
           secondaryContainer: Colors.white,
         ),
       ),
-      routes: {
-        '/login': (context) => const LoginPage(),
-        '/signup': (context) => const SignUpPage(),
-        '/account': (context) => const AccountPage(),
-        '/loading': (context) => const LoadingPage(),
-      },
-      initialRoute: '/login',
+
+      home: initialize.when(data: (data) {
+        return const AuthChecker();
+      }, error: (e, stackTrace) {
+        ErrorScreen(e, stackTrace);
+        return null;
+      }, loading: () {
+        return const LoadingPage();
+      }),
+      // initialRoute: '/login',
     );
   }
 }

@@ -1,15 +1,17 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:geo_me/pages/loading_page.dart';
-import 'package:geo_me/pages/login_page.dart';
+import 'package:geo_me/pages/account_page.dart';
 
-class AccountPage extends StatelessWidget {
-  const AccountPage({Key? key}) : super(key: key);
+class FeedPage extends StatelessWidget {
+  const FeedPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: const Icon(CupertinoIcons.add),
+      ),
       appBar: AppBar(
         flexibleSpace: Container(
           decoration: BoxDecoration(
@@ -23,20 +25,14 @@ class AccountPage extends StatelessWidget {
             ),
           ),
         ),
-        title: const Text('Account'),
+        title: const Text('Geo Feed'),
         actions: [
           CupertinoButton(
-            child: const Icon(Icons.logout),
-            onPressed: () async {
+            child: const Icon(CupertinoIcons.person_crop_circle),
+            onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const LoadingPage()),
-              );
-              await FirebaseAuth.instance.signOut();
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => const LoginPage()),
-                ModalRoute.withName('/'),
+                MaterialPageRoute(builder: (context) => const AccountPage()),
               );
             },
           )

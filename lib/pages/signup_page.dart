@@ -1,11 +1,12 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:geo_me/pages/feed_page.dart';
+import 'package:geo_me/pages/login_page.dart';
 import 'package:validators/validators.dart';
 
-import '../features/auth/fire_auth.dart';
+import '../features/auth/providers/providers.dart';
 import '../responsive/responsive.dart';
 
 class SignUpPage extends StatelessWidget {
@@ -95,39 +96,15 @@ class _EmailPartState extends ConsumerState<EmailPart> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _userNameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final _auth = ref.watch(authenticationProvider);
     return Form(
       key: _formKey,
       autovalidateMode: AutovalidateMode.always,
       child: Column(
         children: [
-          TextFormField(
-            controller: _userNameController,
-            validator: (value) {
-              if (value!.isEmpty) {
-                return 'Please enter some text';
-              }
-              if (value.length < 5) {
-                return 'Must be more than 5 charater';
-              }
-              return null;
-            },
-            autocorrect: false,
-            decoration: InputDecoration(
-              focusColor: Colors.black,
-              floatingLabelStyle: const TextStyle(color: Colors.black),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(40),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              labelText: 'User Name',
-            ),
-          ),
           const SizedBox(
             height: 10,
           ),
@@ -186,22 +163,19 @@ class _EmailPartState extends ConsumerState<EmailPart> {
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
                   Navigator.pushNamed(context, '/loading');
-                  User? user = await FireAuth.registerUsingEmailPassword(
-                    email: _emailController.text,
-                    password: _passwordController.text,
-                    name: _userNameController.text,
+                  await _auth.signInWithEmailAndPassword(
+                      _emailController.text, _passwordController.text, context);
+                  // await FireAuth.signUpWithEmailAndPassword(
+                  //   _emailController.text,
+                  //   _passwordController.text,
+                  //   context,
+                  // );
+
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => const FeedPage()),
+                    ModalRoute.withName('/'),
                   );
-                  if (user != null) {
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                      '/account',
-                      ModalRoute.withName('/'),
-                    );
-                  } else {
-                    Navigator.pop(context);
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text('Error, Try Again'),
-                    ));
-                  }
                 }
               },
               color: Theme.of(context).colorScheme.onPrimary,
@@ -222,7 +196,11 @@ class _EmailPartState extends ConsumerState<EmailPart> {
               focusElevation: 0,
               hoverElevation: 0,
               onPressed: () {
-                Navigator.popAndPushNamed(context, '/login');
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                );
               },
               color: Colors.transparent,
               shape: const StadiumBorder(),

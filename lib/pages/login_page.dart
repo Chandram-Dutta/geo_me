@@ -1,9 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart' hide UserCredential;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:geo_me/pages/feed_page.dart';
+import 'package:geo_me/pages/loading_page.dart';
+import 'package:geo_me/pages/signup_page.dart';
 import 'package:validators/validators.dart';
 
-import '../features/auth/fire_auth.dart';
+import '../features/auth/providers/providers.dart';
 import '../responsive/responsive.dart';
 
 class LoginPage extends StatelessWidget {
@@ -142,7 +144,11 @@ class _FieldsState extends State<Fields> {
               focusElevation: 0,
               hoverElevation: 0,
               onPressed: () {
-                Navigator.popAndPushNamed(context, '/signup');
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SignUpPage()),
+                );
               },
               color: Colors.transparent,
               shape: const StadiumBorder(),
@@ -177,27 +183,25 @@ class LoginButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final _auth = ref.watch(authenticationProvider);
     return MaterialButton(
       height: 40,
       onPressed: () async {
         if (_formKey.currentState!.validate()) {
-          Navigator.pushNamed(context, '/loading');
-          User? user = await FireAuth.signInUsingEmailPassword(
-            email: _emailController.text,
-            password: _passwordController.text,
-            context: context,
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const LoadingPage()),
           );
-          if (user != null) {
-            Navigator.of(context).pushNamedAndRemoveUntil(
-              '/account',
-              ModalRoute.withName('/'),
-            );
-          } else {
-            Navigator.pop(context);
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text('Error, Try Again'),
-            ));
-          }
+          await _auth.signInWithEmailAndPassword(
+            _emailController.text,
+            _passwordController.text,
+            context,
+          );
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const FeedPage()),
+            ModalRoute.withName('/'),
+          );
         }
       },
       color: Theme.of(context).colorScheme.onPrimary,
