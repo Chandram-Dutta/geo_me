@@ -37,10 +37,11 @@ class FireAuth {
           content: Text(e.toString()),
           actions: [
             TextButton(
-                onPressed: () {
-                  Navigator.of(ctx).pop();
-                },
-                child: const Text("OK"))
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+              child: const Text("OK"),
+            )
           ],
         ),
       );
@@ -54,7 +55,6 @@ class FireAuth {
       _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
-        
       );
     } on FirebaseAuthException catch (e) {
       await showDialog(

@@ -8,6 +8,7 @@ import 'package:validators/validators.dart';
 
 import '../features/auth/providers/providers.dart';
 import '../responsive/responsive.dart';
+import 'loading_page.dart';
 
 class SignUpPage extends StatelessWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -162,14 +163,13 @@ class _EmailPartState extends ConsumerState<EmailPart> {
               height: 40,
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
-                  Navigator.pushNamed(context, '/loading');
-                  await _auth.signInWithEmailAndPassword(
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const LoadingPage()),
+                  );
+                  await _auth.signUpWithEmailAndPassword(
                       _emailController.text, _passwordController.text, context);
-                  // await FireAuth.signUpWithEmailAndPassword(
-                  //   _emailController.text,
-                  //   _passwordController.text,
-                  //   context,
-                  // );
 
                   Navigator.pushAndRemoveUntil(
                     context,
