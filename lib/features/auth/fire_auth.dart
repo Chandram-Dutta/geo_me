@@ -165,10 +165,10 @@ class FireAuth {
   }
 
   Future<void> verifyUser() async {
-    User? user = FirebaseAuth.instance.currentUser;
+    User? _user = FirebaseAuth.instance.currentUser;
 
-    if (user != null && !user.emailVerified) {
-      await user.sendEmailVerification();
+    if (_user != null && !_user.emailVerified) {
+      await _user.sendEmailVerification();
     }
   }
 
