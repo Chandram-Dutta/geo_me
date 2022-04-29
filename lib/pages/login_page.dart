@@ -1,7 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:geo_me/pages/feed_page.dart';
-import 'package:geo_me/pages/loading_page.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geo_me/pages/signup_page.dart';
 import 'package:validators/validators.dart';
 
@@ -49,12 +49,50 @@ class LoginPage extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              const Spacer()
+              const Spacer(),
+              const SocialLogin(),
             ],
           ),
         ),
       ],
     ));
+  }
+}
+
+class SocialLogin extends ConsumerWidget {
+  const SocialLogin({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final _auth = ref.watch(authenticationProvider);
+    return Positioned(
+      bottom: 20,
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CupertinoButton(
+                child: const FaIcon(FontAwesomeIcons.google),
+                onPressed: () async {
+                  await _auth.signInWithGoogle(context);
+                },
+              ),
+              CupertinoButton(
+                child: const FaIcon(FontAwesomeIcons.apple),
+                onPressed: () {},
+              ),
+              CupertinoButton(
+                child: const FaIcon(FontAwesomeIcons.facebook),
+                onPressed: () {},
+              )
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -71,96 +109,98 @@ class _FieldsState extends State<Fields> {
   final TextEditingController _passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      autovalidateMode: AutovalidateMode.always,
-      child: Column(
-        children: [
-          TextFormField(
-            controller: _emailController,
-            validator: (val) => !isEmail(val!) ? "Invalid Email" : null,
-            autocorrect: false,
-            decoration: InputDecoration(
-              focusColor: Colors.black,
-              floatingLabelStyle: const TextStyle(color: Colors.black),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(40),
+    return SingleChildScrollView(
+      child: Form(
+        key: _formKey,
+        autovalidateMode: AutovalidateMode.always,
+        child: Column(
+          children: [
+            TextFormField(
+              controller: _emailController,
+              validator: (val) => !isEmail(val!) ? "Invalid Email" : null,
+              autocorrect: false,
+              decoration: InputDecoration(
+                focusColor: Colors.black,
+                floatingLabelStyle: const TextStyle(color: Colors.black),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(40),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                labelText: 'Email ID',
               ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              labelText: 'Email ID',
             ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          TextFormField(
-            controller: _passwordController,
-            validator: (value) {
-              if (value!.isEmpty) {
-                return 'Please enter some text';
-              }
-              if (value.length < 5) {
-                return 'Must be more than 5 charater';
-              }
-              return null;
-            },
-            obscureText: true,
-            autocorrect: false,
-            decoration: InputDecoration(
-              focusColor: Colors.black,
-              floatingLabelStyle: const TextStyle(color: Colors.black),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(40),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              labelText: 'Password',
+            const SizedBox(
+              height: 10,
             ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          SizedBox(
-            height: 50,
-            width: isDesktop(context, 800) ? 500 : 300,
-            child: LoginButton(
-                formKey: _formKey,
-                emailController: _emailController,
-                passwordController: _passwordController),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          SizedBox(
-            height: 50,
-            width: isDesktop(context, 800) ? 500 : 300,
-            child: MaterialButton(
-              hoverColor: Theme.of(context).colorScheme.onSecondary,
-              height: 40,
-              elevation: 0,
-              focusElevation: 0,
-              hoverElevation: 0,
-              onPressed: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SignUpPage()),
-                );
+            TextFormField(
+              controller: _passwordController,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Please enter some text';
+                }
+                if (value.length < 5) {
+                  return 'Must be more than 5 charater';
+                }
+                return null;
               },
-              color: Colors.transparent,
-              shape: const StadiumBorder(),
-              child: Text(
-                'Sign Up Here',
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.primaryContainer,
+              obscureText: true,
+              autocorrect: false,
+              decoration: InputDecoration(
+                focusColor: Colors.black,
+                floatingLabelStyle: const TextStyle(color: Colors.black),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(40),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                labelText: 'Password',
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            SizedBox(
+              height: 50,
+              width: isDesktop(context, 800) ? 500 : 300,
+              child: LoginButton(
+                  formKey: _formKey,
+                  emailController: _emailController,
+                  passwordController: _passwordController),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            SizedBox(
+              height: 50,
+              width: isDesktop(context, 800) ? 500 : 300,
+              child: MaterialButton(
+                hoverColor: Theme.of(context).colorScheme.onSecondary,
+                height: 40,
+                elevation: 0,
+                focusElevation: 0,
+                hoverElevation: 0,
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const SignUpPage()),
+                  );
+                },
+                color: Colors.transparent,
+                shape: const StadiumBorder(),
+                child: Text(
+                  'Sign Up Here',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primaryContainer,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -188,19 +228,10 @@ class LoginButton extends ConsumerWidget {
       height: 40,
       onPressed: () async {
         if (_formKey.currentState!.validate()) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const LoadingPage()),
-          );
           await _auth.signInWithEmailAndPassword(
             _emailController.text,
             _passwordController.text,
             context,
-          );
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => const FeedPage()),
-            ModalRoute.withName('/'),
           );
         }
       },
