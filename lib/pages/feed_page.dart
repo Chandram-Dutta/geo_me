@@ -81,7 +81,6 @@ class GeoPostList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final database = ref.read(databaseProvider);
     return geoPostList.isNotEmpty
         ? ListView.separated(
             physics: const BouncingScrollPhysics(),
