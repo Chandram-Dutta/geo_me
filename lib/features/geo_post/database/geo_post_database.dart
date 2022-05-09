@@ -1,7 +1,10 @@
 // ignore_for_file: avoid_print
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:geo_me/features/geo_post/model/geo_post_model.dart';
+import 'package:geo_me/pages/feed_page.dart';
+import 'package:geo_me/pages/loading_page.dart';
 
 class GeoPostDatabase {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -9,17 +12,26 @@ class GeoPostDatabase {
   late CollectionReference _geoPostsCollection;
   Stream get allGeoPost => _firestore.collection("geopost").snapshots();
 
-  Future<bool> addNewPost(GeoPost m) async {
+  Future<bool> addNewPost(GeoPost m, BuildContext context) async {
     _geoPostsCollection =
         _firestore.collection('geopost'); // referencing the movie collection .
     try {
+       Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const LoadingPage()),
+      );
       await _geoPostsCollection.add({
         'geolocation': m.geolocation,
         'description': m.description,
         'likes': m.likes,
         'username': m.username,
         'postedat': m.postedAt,
-      }); // Adding a new document to our movies collection
+      }); 
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const FeedPage()),
+        (Route<dynamic> route) => false,
+      );// Adding a new document to our movies collection
       return true; // finally return true
     } catch (e) {
       return Future.error(e); // return error
