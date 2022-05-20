@@ -1,6 +1,6 @@
-# geo_me
+# Geo ME
 
-A new Flutter project.
+GEO Me is a social media app in making that revolves around your loaction. Try it on [Geo ME](https://geo-me-app.web.app)
 
 ## Getting Started
 
